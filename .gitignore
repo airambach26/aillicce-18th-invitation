@@ -1,3 +1,5 @@
 .DS_Store
-.vscode/.history/
 Thumbs.db
+.env
+.env.*
+node_modules/
