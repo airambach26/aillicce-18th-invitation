@@ -2,6 +2,12 @@
 
 Built only from the two SVG files in your latest ZIP. Original artwork is unchanged.
 
+## Live invitation
+
+Open or copy this link to your phone to share the interactive invitation:
+
+https://aillicces-joy-18th-invitation.airambach26.chatgpt.site
+
 ## Open and preview
 1. Extract this entire ZIP.
 2. Open Invitation.code-workspace in Visual Studio Code.
