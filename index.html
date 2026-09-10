@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Birthday invitation</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main>
+    <button id="artwork" aria-label="Next invitation page">
+      <img id="slide" src="assets/1.svg" alt="Invitation design, page 1 of 2">
+    </button>
+    <nav aria-label="Invitation pages">
+      <button id="previous" disabled>Back</button>
+      <span id="counter" role="status">1 / 2</span>
+      <button id="next">Next</button>
+    </nav>
+    <p>Tap the design or use the arrow keys</p>
+  </main>
+</body>
+</html>
