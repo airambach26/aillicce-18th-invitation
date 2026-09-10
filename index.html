@@ -1,23 +1,95 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Birthday invitation</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="app.js" defer></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Aillicce's Joy — 18th Birthday</title>
+  <meta name="description" content="A neon arcade invitation for Aillicce's Joy's 18th birthday." />
+  <meta name="theme-color" content="#080318" />
+  <link rel="icon" href="https://aillicces-joy-18th-invitation.airambach26.chatgpt.site/assets/favicon.svg" type="image/svg+xml" />
+  <style>
+    :root{--pink:#ff36c8;--cyan:#51efff;--gold:#ffe540;--ink:#03020c}
+    *{box-sizing:border-box}html,body{height:100%;margin:0;overflow:hidden;background:var(--ink);color:white;font-family:Arial,Helvetica,sans-serif}
+    body{touch-action:manipulation}.deck{height:100%;position:relative;isolation:isolate}
+    .deck:before{content:"";position:fixed;inset:0;z-index:20;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 5px,rgba(80,240,255,.035) 5px 6px)}
+    .slide{position:absolute;inset:0;display:grid;place-items:center;padding:clamp(20px,4vw,60px);opacity:0;visibility:hidden;transform:scale(.975);transition:opacity .55s ease,transform .7s cubic-bezier(.2,.8,.2,1),visibility .55s;background-position:center;background-size:cover}
+    .slide:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at center,transparent 20%,rgba(2,0,12,.55) 100%);z-index:-1}
+    .slide.active{opacity:1;visibility:visible;transform:scale(1)}
+    .s1{background-image:url('https://aillicces-joy-18th-invitation.airambach26.chatgpt.site/assets/insert-coin.jpg');overflow:hidden}.s3{overflow:hidden;background:radial-gradient(ellipse at center,#241052 0%,#09051e 48%,#020109 100%)}.s4{background-image:url('https://aillicces-joy-18th-invitation.airambach26.chatgpt.site/assets/finale.jpg')}
+    .coin-start{position:absolute;inset:0;border:0;background:transparent;cursor:pointer;color:white}.coin{position:absolute;left:50%;top:38%;width:clamp(38px,5vw,68px);aspect-ratio:1;border:4px solid #fff39b;border-radius:50%;display:grid;place-items:center;color:#fff39b;background:radial-gradient(circle,#ffb600 0 38%,#6d3500 41% 55%,#ffd74e 58% 68%,#6f3600 72%);font-weight:900;font-size:clamp(1.1rem,2.5vw,2rem);text-shadow:0 0 7px #fff;box-shadow:0 0 16px #ffb000,0 0 34px rgba(255,54,200,.75);transform:translate(-50%,-50%);animation:coinDrop 2s cubic-bezier(.45,.05,.4,1) infinite}.slot-glow{position:absolute;left:50%;top:62.5%;width:clamp(72px,9vw,120px);height:10px;border-radius:50%;background:var(--pink);box-shadow:0 0 12px var(--pink),0 0 28px var(--cyan);transform:translate(-50%,-50%);animation:slotPulse 1s ease-in-out infinite}.coin-prompt{position:absolute;left:50%;top:73%;transform:translateX(-50%);padding:10px 18px;border:1px solid var(--cyan);border-radius:999px;background:rgba(3,2,12,.68);font-size:clamp(.78rem,1.5vw,1rem);font-weight:800;letter-spacing:.16em;text-shadow:0 0 8px var(--cyan);white-space:nowrap;animation:promptPulse 1.3s infinite}.coin-start:focus-visible{outline:3px solid var(--gold);outline-offset:-8px}
+    .s3:before{content:"";position:absolute;inset:-35%;z-index:-1;background:repeating-conic-gradient(from 45deg at 50% 50%,transparent 0 10deg,rgba(255,54,200,.1) 10deg 12deg,transparent 12deg 22deg,rgba(81,239,255,.1) 22deg 24deg);animation:spin 28s linear infinite}
+    .panel{text-align:center;padding:clamp(24px,5vw,64px);border:2px solid var(--pink);border-radius:18px;background:rgba(2,1,13,.78);box-shadow:0 0 18px var(--pink),inset 0 0 24px rgba(81,239,255,.12);backdrop-filter:blur(6px);max-width:900px}
+    .eyebrow{color:var(--cyan);letter-spacing:.22em;font-weight:800;font-size:clamp(.8rem,2vw,1.05rem)}
+    h1{margin:.35em 0 .15em;font-size:clamp(3.2rem,11vw,8rem);line-height:.85;color:var(--gold);text-shadow:0 0 12px #ff9b00,4px 4px 0 var(--pink)}
+    h2{margin:.2em 0;font-size:clamp(2rem,7vw,5.5rem);line-height:.95;text-transform:uppercase;text-shadow:0 0 14px var(--cyan)}
+    .sub{font-size:clamp(1rem,2.5vw,1.35rem);letter-spacing:.08em;line-height:1.6;margin:1rem 0 0}
+    .start{margin-top:1.4rem;padding:16px 24px;border:2px solid var(--cyan);border-radius:999px;background:#09051f;color:white;font:800 1rem/1 Arial;letter-spacing:.12em;box-shadow:0 0 18px rgba(81,239,255,.75);cursor:pointer;animation:pulse 1.3s infinite}.start:hover,.start:focus-visible{background:var(--cyan);color:#05020d;outline:none}
+    .unlock{background:radial-gradient(circle at 50% 45%,#281254 0,#080318 52%,#020109 100%)}
+    .ring{position:absolute;width:min(74vw,660px);aspect-ratio:1;border:3px solid var(--cyan);transform:rotate(45deg);box-shadow:0 0 32px var(--cyan),inset 0 0 32px rgba(255,54,200,.3);animation:spin 12s linear infinite;z-index:-1}
+    .details-card{display:block;width:min(93vw,1120px);height:auto;max-height:calc(100vh - 150px);object-fit:contain;border:2px solid rgba(255,255,255,.8);border-radius:16px;background:#020109;box-shadow:0 0 24px var(--pink),0 0 70px rgba(81,239,255,.42);cursor:pointer}
+    .finale .panel{border-color:var(--cyan)}.finale h2{color:var(--gold)}
+    .controls{position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:30;display:flex;align-items:center;gap:14px;padding:8px 10px;border-radius:999px;background:rgba(2,1,12,.72);backdrop-filter:blur(10px)}
+    .nav{width:46px;height:46px;border:1px solid rgba(255,255,255,.32);border-radius:50%;background:rgba(12,7,35,.9);color:white;font-size:1.35rem;cursor:pointer}.nav:hover,.nav:focus-visible{border-color:var(--cyan);box-shadow:0 0 12px var(--cyan);outline:none}.nav:disabled{opacity:.3;cursor:default;box-shadow:none}
+    .dots{display:flex;gap:8px}.dot{width:9px;height:9px;border:0;border-radius:50%;padding:0;background:#716b82;cursor:pointer}.dot.on{background:var(--pink);box-shadow:0 0 9px var(--pink)}
+    .hint{position:fixed;top:18px;right:20px;z-index:30;font-size:.78rem;letter-spacing:.08em;color:#d8d1e8;background:rgba(3,2,12,.62);padding:8px 12px;border-radius:999px}
+    @keyframes pulse{50%{box-shadow:0 0 30px var(--pink);transform:translateY(-2px)}}@keyframes promptPulse{50%{box-shadow:0 0 24px var(--pink);transform:translateX(-50%) translateY(-2px)}}@keyframes spin{to{transform:rotate(405deg)}}@keyframes coinDrop{0%{top:37%;opacity:0;transform:translate(-50%,-50%) scale(.55) rotateY(0)}18%{opacity:1}72%{top:59%;opacity:1;transform:translate(-50%,-50%) scale(1) rotateY(720deg)}88%,100%{top:62%;opacity:0;transform:translate(-50%,-50%) scale(.35) rotateY(900deg)}}@keyframes slotPulse{50%{opacity:.45;transform:translate(-50%,-50%) scaleX(.72)}}
+    @media (max-width:600px){.hint{display:none}.controls{bottom:max(12px,env(safe-area-inset-bottom))}.slide{padding:18px 16px 84px}.details-card{width:96vw}.panel{padding:30px 20px}}
+    @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+    /* Save slot 05: neon coin-machine polish */
+    .s1::before{content:"";position:absolute;inset:-8%;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 50% 48%,rgba(255,54,200,.34) 0 12%,rgba(81,239,255,.17) 25%,transparent 65%);mix-blend-mode:screen;opacity:.82}
+    .s1.active::before{animation:neonWash 2.5s ease-in-out infinite}
+    .coin-start{z-index:2;display:block}
+    .coin-route{position:absolute;left:50%;top:35%;width:4px;height:34%;z-index:1;transform:translateX(-50%);border-radius:999px;background:repeating-linear-gradient(180deg,rgba(81,239,255,.75) 0 9px,transparent 9px 18px);box-shadow:0 0 10px rgba(81,239,255,.75);opacity:.38;pointer-events:none}
+    .coin-slot{position:absolute;left:50%;top:68.5%;z-index:3;width:clamp(150px,16vw,230px);height:clamp(76px,8vw,104px);transform:translateX(-50%);border:2px solid var(--pink);border-radius:18px;background:linear-gradient(180deg,rgba(15,7,40,.88),rgba(2,1,13,.96));box-shadow:0 0 12px var(--pink),0 0 30px rgba(81,239,255,.52),inset 0 0 18px rgba(255,54,200,.25);pointer-events:none;transition:transform .25s ease,box-shadow .25s ease}
+    .coin-slot::before{content:"";position:absolute;left:12%;right:12%;top:12%;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);box-shadow:0 0 8px var(--cyan);opacity:.9}
+    .slot-label{position:absolute;left:0;right:0;top:26%;color:var(--cyan);font-size:clamp(.52rem,1vw,.7rem);font-weight:900;letter-spacing:.25em;text-shadow:0 0 8px var(--cyan)}
+    .slot-opening{position:absolute;left:15%;right:15%;bottom:18%;height:clamp(13px,1.5vw,20px);border:2px solid var(--gold);border-radius:999px;background:#010007;box-shadow:0 0 7px var(--gold),inset 0 0 8px #000;overflow:hidden}
+    .slot-opening::after{content:"";position:absolute;inset:2px;border-radius:inherit;background:linear-gradient(90deg,transparent 0 28%,rgba(255,229,64,.7) 50%,transparent 72%);opacity:.35;animation:slotScan 1.8s ease-in-out infinite}
+    .slot-lamp{position:absolute;right:9%;top:23%;width:8px;height:8px;border-radius:50%;background:var(--pink);box-shadow:0 0 5px var(--pink),0 0 14px var(--pink);animation:slotLamp 1.25s ease-in-out infinite}
+    .coin-start .coin{z-index:4;top:37%;opacity:1;animation:coinIdle 2.6s ease-in-out infinite}
+    .coin-start .slot-glow{z-index:1;top:69%;width:clamp(118px,14vw,200px);height:36px;background:radial-gradient(ellipse,rgba(255,54,200,.72),rgba(81,239,255,.34) 42%,transparent 72%);filter:blur(6px);opacity:.7;animation:slotGlow 1.5s ease-in-out infinite}
+    .coin-start .coin-prompt{z-index:5;top:81%;border-color:var(--cyan);box-shadow:0 0 12px rgba(81,239,255,.45);transition:color .2s ease,border-color .2s ease,box-shadow .2s ease}
+    .coin-start:hover .coin-slot,.coin-start:focus-visible .coin-slot{box-shadow:0 0 18px var(--pink),0 0 48px rgba(81,239,255,.78),inset 0 0 22px rgba(255,54,200,.38)}
+    .coin-start.inserting .coin{animation:coinInsert 1.15s cubic-bezier(.25,.8,.35,1) forwards}
+    .coin-start.inserting .coin-slot{animation:slotReceive 1.15s ease-in-out forwards}
+    .coin-start.inserting .slot-opening{border-color:var(--cyan);box-shadow:0 0 10px var(--cyan),inset 0 0 12px #000}
+    .coin-start.inserting .slot-lamp{background:var(--gold);box-shadow:0 0 8px var(--gold),0 0 18px var(--gold)}
+    .coin-start.inserting .coin-prompt{color:var(--gold);border-color:var(--gold);box-shadow:0 0 18px rgba(255,229,64,.5);animation:none}
+    .s3:before{animation:spin 28s linear infinite,stageFlicker 5.2s steps(1,end) infinite}
+    .s3 .details-card{animation:detailsFlicker 5.2s steps(1,end) infinite;will-change:filter,box-shadow}
+    @keyframes neonWash{0%,100%{opacity:.62;filter:brightness(.92)}45%{opacity:1;filter:brightness(1.18)}52%{opacity:.72;filter:brightness(.98)}58%{opacity:1;filter:brightness(1.2)}}
+    @keyframes coinIdle{0%,100%{top:37%;transform:translate(-50%,-50%) rotateY(0) scale(.96);filter:brightness(.96)}50%{top:39%;transform:translate(-50%,-50%) rotateY(180deg) scale(1.04);filter:brightness(1.2)}}
+    @keyframes coinInsert{0%{top:37%;opacity:1;transform:translate(-50%,-50%) rotateY(0) scale(1)}32%{top:48%;opacity:1;transform:translate(-50%,-50%) rotateY(540deg) scale(1.05)}68%{top:62%;opacity:1;transform:translate(-50%,-50%) rotateY(1080deg) scale(.92)}88%{top:69%;opacity:1;transform:translate(-50%,-50%) rotateY(1440deg) scale(.62)}100%{top:72%;opacity:0;transform:translate(-50%,-50%) rotateY(1620deg) scale(.24)}}
+    @keyframes slotReceive{0%,100%{transform:translateX(-50%) scale(1)}55%{transform:translateX(-50%) scale(1.045);box-shadow:0 0 28px var(--pink),0 0 68px rgba(81,239,255,.95),inset 0 0 28px rgba(255,54,200,.5)}75%{transform:translateX(-50%) scale(.985)}}
+    @keyframes slotScan{50%{transform:translateX(50%);opacity:.9}100%{transform:translateX(130%);opacity:0}}
+    @keyframes slotLamp{50%{opacity:.35;transform:scale(.7)}75%{opacity:1;transform:scale(1.2)}}
+    @keyframes slotGlow{50%{opacity:1;transform:translate(-50%,-50%) scale(1.18)}}
+    @keyframes stageFlicker{0%,100%{opacity:1}5%{opacity:.72}6%{opacity:.98}35%{opacity:.94}36%{opacity:.48}38%{opacity:1}71%{opacity:.82}72%{opacity:.35}74%{opacity:1}}
+    @keyframes detailsFlicker{0%,100%{filter:brightness(1);box-shadow:0 0 24px var(--pink),0 0 70px rgba(81,239,255,.42)}5%{filter:brightness(.78);box-shadow:0 0 10px var(--pink),0 0 32px rgba(81,239,255,.2)}6%{filter:brightness(1.18);box-shadow:0 0 34px var(--pink),0 0 92px rgba(81,239,255,.75)}7%{filter:brightness(.92)}35%{filter:brightness(1)}36%{filter:brightness(.55);box-shadow:0 0 5px var(--pink),0 0 18px rgba(81,239,255,.15)}38%{filter:brightness(1.1);box-shadow:0 0 28px var(--pink),0 0 78px rgba(81,239,255,.55)}71%{filter:brightness(.96)}72%{filter:brightness(.62);box-shadow:0 0 8px var(--pink),0 0 24px rgba(81,239,255,.18)}74%{filter:brightness(1.2);box-shadow:0 0 38px var(--pink),0 0 100px rgba(81,239,255,.8)}}
+  </style>
 </head>
 <body>
-  <main>
-    <button id="artwork" aria-label="Next invitation page">
-      <img id="slide" src="assets/1.svg" alt="Invitation design, page 1 of 2">
-    </button>
-    <nav aria-label="Invitation pages">
-      <button id="previous" disabled>Back</button>
-      <span id="counter" role="status">1 / 2</span>
-      <button id="next">Next</button>
-    </nav>
-    <p>Tap the design or use the arrow keys</p>
+  <main class="deck" aria-label="Interactive birthday invitation">
+    <section class="slide s1 active" aria-hidden="false"><button class="coin-start" type="button" aria-label="Insert coin and open invitation"><span class="coin-route" aria-hidden="true"></span><span class="coin" aria-hidden="true">18</span><span class="slot-glow" aria-hidden="true"></span><span class="coin-slot" aria-hidden="true"><span class="slot-label">COIN SLOT</span><span class="slot-opening"></span><span class="slot-lamp"></span></span><span class="coin-prompt" aria-live="polite">TAP TO INSERT COIN</span></button></section>
+    <section class="slide unlock" aria-hidden="true"><div class="ring"></div><div class="panel"><div class="eyebrow">ACHIEVEMENT UNLOCKED</div><h1>18</h1><h2>Level up!</h2><p class="sub">Aillicce's Joy is turning eighteen.</p></div></section>
+    <section class="slide s3" aria-hidden="true"><img class="details-card" src="https://aillicces-joy-18th-invitation.airambach26.chatgpt.site/assets/invitation.jpg" alt="Party details for Aillicce's Joy's 18th birthday: September 16th at 4 PM." /></section>
+    <section class="slide s4 finale" aria-hidden="true"><div class="panel"><div class="eyebrow">MISSION ACCEPTED</div><h2>See you there!</h2><p class="sub">Tap replay to experience the invitation again.</p><button class="start replay" type="button">REPLAY</button></div></section>
   </main>
+  <div class="hint">SAVE SLOT 05 · Click, tap, or use ← →</div>
+  <nav class="controls" aria-label="Slide controls"><button class="nav prev" aria-label="Previous slide">‹</button><div class="dots" aria-label="Choose slide"></div><button class="nav next" aria-label="Next slide">›</button></nav>
+  <script>
+    const slides=[...document.querySelectorAll('.slide')], dots=document.querySelector('.dots'), coinStart=document.querySelector('.coin-start'), coinPrompt=document.querySelector('.coin-prompt'); let current=0,coinTimer=0,inserting=false;
+    slides.forEach((_,i)=>{const b=document.createElement('button');b.className='dot'+(i?'':' on');b.setAttribute('aria-label',`Go to slide ${i+1}`);b.onclick=e=>{e.stopPropagation();show(i)};dots.append(b)});
+    const dotEls=[...dots.children],prev=document.querySelector('.prev'),next=document.querySelector('.next');
+    function resetCoin(){if(coinTimer){clearTimeout(coinTimer);coinTimer=0}inserting=false;coinStart.classList.remove('inserting');coinStart.disabled=false;coinPrompt.textContent='TAP TO INSERT COIN';coinStart.setAttribute('aria-label','Insert coin and open invitation')}
+    function show(i){resetCoin();current=Math.max(0,Math.min(slides.length-1,i));slides.forEach((s,n)=>{const on=n===current;s.classList.toggle('active',on);s.setAttribute('aria-hidden',String(!on))});dotEls.forEach((d,n)=>d.classList.toggle('on',n===current));prev.disabled=current===0;next.disabled=current===slides.length-1}
+    function insertCoin(){if(current!==0){show(current+1);return}if(inserting)return;inserting=true;coinStart.disabled=true;coinStart.classList.add('inserting');coinPrompt.textContent='INSERTING COIN…';coinStart.setAttribute('aria-label','Inserting coin');coinTimer=window.setTimeout(()=>{coinTimer=0;show(1)},1150)}
+    function forward(){if(current===0){insertCoin();return}show(current+1)} function back(){show(current-1)}
+    next.onclick=e=>{e.stopPropagation();forward()};prev.onclick=e=>{e.stopPropagation();back()};
+    coinStart.onclick=e=>{e.stopPropagation();insertCoin()};document.querySelector('.replay').onclick=e=>{e.stopPropagation();show(0)};
+    document.querySelector('.deck').onclick=()=>current<slides.length-1&&forward();
+    addEventListener('keydown',e=>{if(['ArrowRight',' ','Enter'].includes(e.key)){e.preventDefault();forward()}if(e.key==='ArrowLeft'){e.preventDefault();back()}});
+    let x=0;addEventListener('touchstart',e=>x=e.changedTouches[0].clientX,{passive:true});addEventListener('touchend',e=>{const d=e.changedTouches[0].clientX-x;if(Math.abs(d)>55)(d<0?forward:back)()},{passive:true});show(0);
+  </script>
 </body>
 </html>
