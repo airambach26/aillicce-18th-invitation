@@ -1,0 +1,11 @@
+:root{color-scheme:dark;font-family:Arial,sans-serif;background:#070711;color:#fff}
+*{box-sizing:border-box}body{margin:0;min-height:100svh;display:grid;place-items:center}
+main{width:100%;padding:20px;text-align:center}
+#artwork{display:block;border:0;padding:0;background:transparent;width:min(100%,1440px);margin:auto;cursor:pointer}
+#slide{display:block;width:100%;max-height:calc(100svh - 150px);object-fit:contain}
+nav{display:flex;align-items:center;justify-content:center;gap:24px;margin-top:20px}
+nav button{font:inherit;min-height:44px;padding:10px 24px;color:white;background:#19192d;border:1px solid #9898c6;border-radius:8px;cursor:pointer}
+button:focus-visible{outline:3px solid #71eaff;outline-offset:4px}button:disabled{opacity:.4;cursor:default}
+p{font-size:14px;color:#bcbccf} .reveal{animation:reveal .35s ease-out}
+@keyframes reveal{from{opacity:.25;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.reveal{animation:none}}
