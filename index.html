@@ -37,7 +37,6 @@
     @keyframes pulse{50%{box-shadow:0 0 30px var(--pink);transform:translateY(-2px)}}@keyframes promptPulse{50%{box-shadow:0 0 24px var(--pink);transform:translateX(-50%) translateY(-2px)}}@keyframes spin{to{transform:rotate(405deg)}}@keyframes coinDrop{0%{top:37%;opacity:0;transform:translate(-50%,-50%) scale(.55) rotateY(0)}18%{opacity:1}72%{top:59%;opacity:1;transform:translate(-50%,-50%) scale(1) rotateY(720deg)}88%,100%{top:62%;opacity:0;transform:translate(-50%,-50%) scale(.35) rotateY(900deg)}}@keyframes slotPulse{50%{opacity:.45;transform:translate(-50%,-50%) scaleX(.72)}}
     @media (max-width:600px){.hint{display:none}.controls{bottom:max(12px,env(safe-area-inset-bottom))}.slide{padding:18px 16px 84px}.details-card{width:96vw}.panel{padding:30px 20px}}
     @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-    /* Save slot 07: level-up arena and party-mode finale */
     .s1::before{content:"";position:absolute;inset:-4%;z-index:0;pointer-events:none;background-image:url('assets/insert-coin.jpg');background-size:cover;background-position:center;filter:blur(7px) brightness(1.08) saturate(1.55);mix-blend-mode:screen;opacity:.7;transform:scale(1.025)}
     .s1.active::before{animation:neonWash 2.5s ease-in-out infinite}
     .s1.active .coin-route{animation:routePulse 1.8s ease-in-out infinite}
@@ -88,18 +87,151 @@
   <div class="hint">SAVE SLOT 07 · Click, tap, or use ← →</div>
   <nav class="controls" aria-label="Slide controls"><button class="nav prev" aria-label="Previous slide">‹</button><div class="dots" aria-label="Choose slide"></div><button class="nav next" aria-label="Next slide">›</button></nav>
   <script>
-    const slides=[...document.querySelectorAll('.slide')], dots=document.querySelector('.dots'), coinStart=document.querySelector('.coin-start'), coinPrompt=document.querySelector('.coin-prompt'); let current=0,coinTimer=0,inserting=false;
-    slides.forEach((_,i)=>{const b=document.createElement('button');b.className='dot'+(i?'':' on');b.setAttribute('aria-label',`Go to slide ${i+1}`);b.onclick=e=>{e.stopPropagation();show(i)};dots.append(b)});
-    const dotEls=[...dots.children],prev=document.querySelector('.prev'),next=document.querySelector('.next');
-    function resetCoin(){if(coinTimer){clearTimeout(coinTimer);coinTimer=0}inserting=false;coinStart.classList.remove('inserting');coinStart.disabled=false;coinPrompt.textContent='TAP TO INSERT COIN';coinStart.setAttribute('aria-label','Insert coin and open invitation')}
-    function show(i){resetCoin();current=Math.max(0,Math.min(slides.length-1,i));slides.forEach((s,n)=>{const on=n===current;s.classList.toggle('active',on);s.setAttribute('aria-hidden',String(!on))});dotEls.forEach((d,n)=>d.classList.toggle('on',n===current));prev.disabled=current===0;next.disabled=current===slides.length-1}
-    function insertCoin(){if(current!==0){show(current+1);return}if(inserting)return;inserting=true;coinStart.disabled=true;coinStart.classList.add('inserting');coinPrompt.textContent='INSERTING COIN…';coinStart.setAttribute('aria-label','Inserting coin');coinTimer=window.setTimeout(()=>{coinTimer=0;show(1)},1150)}
-    function forward(){if(current===0){insertCoin();return}show(current+1)} function back(){show(current-1)}
-    next.onclick=e=>{e.stopPropagation();forward()};prev.onclick=e=>{e.stopPropagation();back()};
-    coinStart.onclick=e=>{e.stopPropagation();insertCoin()};document.querySelector('.replay').onclick=e=>{e.stopPropagation();show(0)};
-    document.querySelector('.deck').onclick=()=>current<slides.length-1&&forward();
-    addEventListener('keydown',e=>{if(['ArrowRight',' ','Enter'].includes(e.key)){e.preventDefault();forward()}if(e.key==='ArrowLeft'){e.preventDefault();back()}});
-    let x=0;addEventListener('touchstart',e=>x=e.changedTouches[0].clientX,{passive:true});addEventListener('touchend',e=>{const d=e.changedTouches[0].clientX-x;if(Math.abs(d)>55)(d<0?forward:back)()},{passive:true});show(0);
+    const slides = Array.from(document.querySelectorAll(".slide"));
+    const dots = document.querySelector(".dots");
+    const coinStart = document.querySelector(".coin-start");
+    const coinPrompt = document.querySelector(".coin-prompt");
+    const previousButton = document.querySelector(".prev");
+    const nextButton = document.querySelector(".next");
+    const replayButton = document.querySelector(".replay");
+
+    let slideIndex = 0;
+    let coinTimer = null;
+    let movingCoin = false;
+    let touchStartX = 0;
+
+    const dotButtons = slides.map(function (_, index) {
+      const dot = document.createElement("button");
+      dot.className = index === 0 ? "dot on" : "dot";
+      dot.setAttribute("aria-label", "Go to slide " + (index + 1));
+      dot.addEventListener("click", function (event) {
+        event.stopPropagation();
+        showSlide(index);
+      });
+      dots.append(dot);
+      return dot;
+    });
+
+    function resetCoin() {
+      if (coinTimer) {
+        clearTimeout(coinTimer);
+        coinTimer = null;
+      }
+
+      movingCoin = false;
+      coinStart.classList.remove("inserting");
+      coinStart.disabled = false;
+      coinPrompt.textContent = "TAP TO INSERT COIN";
+      coinStart.setAttribute("aria-label", "Insert coin and open invitation");
+    }
+
+    function showSlide(index) {
+      resetCoin();
+      slideIndex = Math.max(0, Math.min(slides.length - 1, index));
+
+      slides.forEach(function (slide, currentIndex) {
+        const isCurrent = currentIndex === slideIndex;
+        slide.classList.toggle("active", isCurrent);
+        slide.setAttribute("aria-hidden", String(!isCurrent));
+      });
+
+      dotButtons.forEach(function (dot, currentIndex) {
+        dot.classList.toggle("on", currentIndex === slideIndex);
+      });
+
+      previousButton.disabled = slideIndex === 0;
+      nextButton.disabled = slideIndex === slides.length - 1;
+    }
+
+    function insertCoin() {
+      if (slideIndex !== 0) {
+        showSlide(slideIndex + 1);
+        return;
+      }
+
+      if (movingCoin) {
+        return;
+      }
+
+      movingCoin = true;
+      coinStart.disabled = true;
+      coinStart.classList.add("inserting");
+      coinPrompt.textContent = "INSERTING COIN…";
+      coinStart.setAttribute("aria-label", "Inserting coin");
+      coinTimer = window.setTimeout(function () {
+        coinTimer = null;
+        showSlide(1);
+      }, 1150);
+    }
+
+    function goForward() {
+      if (slideIndex === 0) {
+        insertCoin();
+        return;
+      }
+
+      showSlide(slideIndex + 1);
+    }
+
+    function goBack() {
+      showSlide(slideIndex - 1);
+    }
+
+    nextButton.addEventListener("click", function (event) {
+      event.stopPropagation();
+      goForward();
+    });
+
+    previousButton.addEventListener("click", function (event) {
+      event.stopPropagation();
+      goBack();
+    });
+
+    coinStart.addEventListener("click", function (event) {
+      event.stopPropagation();
+      insertCoin();
+    });
+
+    replayButton.addEventListener("click", function (event) {
+      event.stopPropagation();
+      showSlide(0);
+    });
+
+    document.querySelector(".deck").addEventListener("click", function () {
+      if (slideIndex < slides.length - 1) {
+        goForward();
+      }
+    });
+
+    window.addEventListener("keydown", function (event) {
+      if (["ArrowRight", " ", "Enter"].includes(event.key)) {
+        event.preventDefault();
+        goForward();
+      }
+
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        goBack();
+      }
+    });
+
+    window.addEventListener("touchstart", function (event) {
+      touchStartX = event.changedTouches[0].clientX;
+    }, { passive: true });
+
+    window.addEventListener("touchend", function (event) {
+      const distance = event.changedTouches[0].clientX - touchStartX;
+
+      if (Math.abs(distance) > 55) {
+        if (distance < 0) {
+          goForward();
+        } else {
+          goBack();
+        }
+      }
+    }, { passive: true });
+
+    showSlide(0);
   </script>
 </body>
 </html>
